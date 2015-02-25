@@ -1,0 +1,162 @@
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:462 - ReaderEventNotificationData misses optional parameter of type HoppingEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:502 - ReaderEventNotificationData misses optional parameter of type GPIEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:543 - ReaderEventNotificationData misses optional parameter of type ROSpecEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:586 - ReaderEventNotificationData misses optional parameter of type ReportBufferLevelWarningEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:629 - ReaderEventNotificationData misses optional parameter of type ReportBufferOverflowErrorEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:671 - ReaderEventNotificationData misses optional parameter of type ReaderExceptionEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:713 - ReaderEventNotificationData misses optional parameter of type RFSurveyEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:754 - ReaderEventNotificationData misses optional parameter of type AISpecEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:795 - ReaderEventNotificationData misses optional parameter of type AntennaEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:862 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:879 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:937 - encoded message does not contain parameter for optional customList
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.READER_EVENT_NOTIFICATION received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:63 - LLRP reader reported successfull connection attempt (ConnectionAttemptEvent.Status = Success)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - IMPINJ_ENABLE_EXTENSIONS transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message IMPINJ_ENABLE_EXTENSIONS successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.custom.messages.IMPINJ_ENABLE_EXTENSIONS_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - GET_READER_CAPABILITIES transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message GET_READER_CAPABILITIES successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  GeneralDeviceCapabilities:476 - encoded message does not contain parameter for optional perAntennaReceiveSensitivityRangeList
+2015-02-23 18:25:27 INFO  FrequencyInformation:266 - FrequencyInformation misses optional parameter of type FixedFrequencyTable
+2015-02-23 18:25:27 INFO  FrequencyInformation:283 - FrequencyInformation misses optional parameter of type FixedFrequencyTable
+2015-02-23 18:25:27 INFO  RegulatoryCapabilities:297 - encoded message does not contain parameter for optional customList
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.GET_READER_CAPABILITIES_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:156 -  readerEventNotificationSpec not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:181 -  rOReportSpec not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:188 -  accessReportSpec not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:195 -  keepaliveSpec not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:220 -  eventsAndReports not set
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - SET_READER_CONFIG transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message SET_READER_CONFIG successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.SET_READER_CONFIG_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - DELETE_ROSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message DELETE_ROSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.DELETE_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - DELETE_ACCESSSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message DELETE_ACCESSSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.DELETE_ACCESSSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - IMPINJ_ENABLE_EXTENSIONS transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message IMPINJ_ENABLE_EXTENSIONS successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.custom.messages.IMPINJ_ENABLE_EXTENSIONS_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  AntennaConfiguration:124 -  rFReceiver not set
+2015-02-23 18:25:27 INFO  AntennaConfiguration:131 -  rFTransmitter not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:188 -  accessReportSpec not set
+2015-02-23 18:25:27 INFO  SET_READER_CONFIG:195 -  keepaliveSpec not set
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - SET_READER_CONFIG transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message SET_READER_CONFIG successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.SET_READER_CONFIG_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  ROSpecStartTrigger:121 -  periodicTriggerValue not set
+2015-02-23 18:25:27 INFO  ROSpecStartTrigger:128 -  gPITriggerValue not set
+2015-02-23 18:25:27 INFO  ROSpecStopTrigger:129 -  gPITriggerValue not set
+2015-02-23 18:25:27 INFO  AISpecStopTrigger:131 -  gPITriggerValue not set
+2015-02-23 18:25:27 INFO  AISpecStopTrigger:138 -  tagObservationTrigger not set
+2015-02-23 18:25:27 INFO  C1G2SingulationControl:147 -  c1G2TagInventoryStateAwareSingulationAction not set
+2015-02-23 18:25:27 INFO  ImpinjTagReportContentSelector:134 -  impinjEnableRFPhaseAngle not set
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - ADD_ROSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message ADD_ROSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.ADD_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - ENABLE_ROSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message ENABLE_ROSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.ENABLE_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - ENABLE_ROSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message ENABLE_ROSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.ENABLE_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPConnection:152 - START_ROSPEC transact ....
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:122 - Message START_ROSPEC successfully transmitted
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:462 - ReaderEventNotificationData misses optional parameter of type HoppingEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:502 - ReaderEventNotificationData misses optional parameter of type GPIEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:568 - ReaderEventNotificationData misses optional parameter of type ReportBufferLevelWarningEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:586 - ReaderEventNotificationData misses optional parameter of type ReportBufferLevelWarningEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:611 - ReaderEventNotificationData misses optional parameter of type ReportBufferOverflowErrorEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:629 - ReaderEventNotificationData misses optional parameter of type ReportBufferOverflowErrorEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:654 - ReaderEventNotificationData misses optional parameter of type ReaderExceptionEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:671 - ReaderEventNotificationData misses optional parameter of type ReaderExceptionEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:696 - ReaderEventNotificationData misses optional parameter of type RFSurveyEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:713 - ReaderEventNotificationData misses optional parameter of type RFSurveyEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:738 - ReaderEventNotificationData misses optional parameter of type AISpecEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:754 - ReaderEventNotificationData misses optional parameter of type AISpecEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:779 - ReaderEventNotificationData misses optional parameter of type AntennaEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:795 - ReaderEventNotificationData misses optional parameter of type AntennaEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:820 - ReaderEventNotificationData misses optional parameter of type ConnectionAttemptEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:837 - ReaderEventNotificationData misses optional parameter of type ConnectionAttemptEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:862 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:879 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:27 INFO  ReaderEventNotificationData:937 - encoded message does not contain parameter for optional customList
+2015-02-23 18:25:27 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:27 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.READER_EVENT_NOTIFICATION received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:27 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.START_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:29 INFO  LLRPConnection:152 - DISABLE_ROSPEC transact ....
+2015-02-23 18:25:29 INFO  LLRPIoHandlerAdapterImpl:122 - Message DISABLE_ROSPEC successfully transmitted
+2015-02-23 18:25:29 INFO  RO_ACCESS_REPORT:282 - encoded message does not contain parameter for optional tagReportDataList
+2015-02-23 18:25:29 INFO  RO_ACCESS_REPORT:332 - encoded message does not contain parameter for optional rFSurveyReportDataList
+2015-02-23 18:25:29 INFO  RO_ACCESS_REPORT:412 - encoded message does not contain parameter for optional customList
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:462 - ReaderEventNotificationData misses optional parameter of type HoppingEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:502 - ReaderEventNotificationData misses optional parameter of type GPIEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:568 - ReaderEventNotificationData misses optional parameter of type ReportBufferLevelWarningEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:586 - ReaderEventNotificationData misses optional parameter of type ReportBufferLevelWarningEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:611 - ReaderEventNotificationData misses optional parameter of type ReportBufferOverflowErrorEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:629 - ReaderEventNotificationData misses optional parameter of type ReportBufferOverflowErrorEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:654 - ReaderEventNotificationData misses optional parameter of type ReaderExceptionEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:671 - ReaderEventNotificationData misses optional parameter of type ReaderExceptionEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:696 - ReaderEventNotificationData misses optional parameter of type RFSurveyEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:713 - ReaderEventNotificationData misses optional parameter of type RFSurveyEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:738 - ReaderEventNotificationData misses optional parameter of type AISpecEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:754 - ReaderEventNotificationData misses optional parameter of type AISpecEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:779 - ReaderEventNotificationData misses optional parameter of type AntennaEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:795 - ReaderEventNotificationData misses optional parameter of type AntennaEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:820 - ReaderEventNotificationData misses optional parameter of type ConnectionAttemptEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:837 - ReaderEventNotificationData misses optional parameter of type ConnectionAttemptEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:862 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:879 - ReaderEventNotificationData misses optional parameter of type ConnectionCloseEvent
+2015-02-23 18:25:29 INFO  ReaderEventNotificationData:937 - encoded message does not contain parameter for optional customList
+2015-02-23 18:25:29 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.RO_ACCESS_REPORT received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:29 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.READER_EVENT_NOTIFICATION received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
+2015-02-23 18:25:29 INFO  LLRPStatus:238 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:29 INFO  LLRPStatus:254 - LLRPStatus misses optional parameter of type FieldError
+2015-02-23 18:25:29 INFO  LLRPStatus:279 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:29 INFO  LLRPStatus:296 - LLRPStatus misses optional parameter of type ParameterError
+2015-02-23 18:25:29 INFO  LLRPIoHandlerAdapterImpl:81 - message class org.llrp.ltk.generated.messages.DISABLE_ROSPEC_RESPONSE received in session (SOCKET, R: /169.254.1.1:5084, L: /169.254.177.186:1728, S: /169.254.1.1:5084)
