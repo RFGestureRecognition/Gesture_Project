@@ -1,126 +1,155 @@
 package Gesture_Recognition;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.net.*;
-import java.io.File;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.event.*;
-  
-public class ZoomTest
-{
-    public static void main(String[] args)
-    {
-        ImagePanel panel = new ImagePanel();
-        ImageZoom zoom = new ImageZoom(panel);
-        JFrame f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.getContentPane().add(zoom.getUIPanel(), "North");
-        f.getContentPane().add(new JScrollPane(panel));
-        f.setSize(400,400);
-        f.setLocation(200,200);
-        f.setVisible(true);
-    }
-}
-  
-class ImagePanel extends JPanel
-{
-    BufferedImage image;
-    double scale;
-  
-    
-		
-		
+import java.util.List;
+import java.util.Scanner;
 
-    
-    public ImagePanel()
-    {
-        loadImage();
-        scale = 1.0;
-        setBackground(Color.black);
-    }
-  
-    protected void paintComponent(Graphics g)
-    {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                            RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-        int w = getWidth();
-        int h = getHeight();
-        int imageWidth = image.getWidth();
-        int imageHeight = image.getHeight();
-        double x = (w - scale * imageWidth)/2;
-        double y = (h - scale * imageHeight)/2;
-        AffineTransform at = AffineTransform.getTranslateInstance(x,y);
-        at.scale(scale, scale);
-        g2.drawRenderedImage(image, at);
-    }
-  
-    /**
-     * For the scroll pane.
-     */
-    public Dimension getPreferredSize()
-    {
-        int w = (int)(scale * image.getWidth());
-        int h = (int)(scale * image.getHeight());
-        return new Dimension(w, h);
-    }
-  
-    public void setScale(double s)
-    {
-        scale = s;
-        revalidate();      // update the scroll pane
-        repaint();
-    }
-  
-    private void loadImage()
-    {
-    
-        try
-        {
-        	image = ImageIO.read(new File("./Resources/moon.jpg"));
-        }
-        catch(MalformedURLException mue)
-        {
-            System.out.println("URL trouble: " + mue.getMessage());
-        }
-        catch(IOException ioe)
-        {
-            System.out.println("read trouble: " + ioe.getMessage());
-        }
-    }
-}
-  
-class ImageZoom
-{
-    ImagePanel imagePanel;
-  
-    public ImageZoom(ImagePanel ip)
-    {
-        imagePanel = ip;
-    }
-  
-    public JPanel getUIPanel()
-    {
-        SpinnerNumberModel model = new SpinnerNumberModel(1.0, 0.1, 1.4, .01);
-        final JSpinner spinner = new JSpinner(model);
-        spinner.setPreferredSize(new Dimension(45, spinner.getPreferredSize().height));
-        spinner.addChangeListener(new ChangeListener()
-        {
-            public void stateChanged(ChangeEvent e)
-            {
-                float scale = ((Double)spinner.getValue()).floatValue();
-                imagePanel.setScale(scale);
-            }
-        });
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("scale"));
-        panel.add(spinner);
-        return panel;
-    }
+import com.impinj.octanesdk.AntennaConfigGroup;
+import com.impinj.octanesdk.ImpinjReader;
+import com.impinj.octanesdk.OctaneSdkException;
+import com.impinj.octanesdk.ReaderMode;
+import com.impinj.octanesdk.ReportConfig;
+import com.impinj.octanesdk.ReportMode;
+import com.impinj.octanesdk.Settings;
+import com.impinj.octanesdk.Tag;
+import com.impinj.octanesdk.TagReport;
+import com.impinj.octanesdk.TagReportListener;
+
+public class ZoomTest implements TagReportListener {
+	ZoomTestFrame zFrame;
+	ImpinjReader reader;
+	AntennaConfigGroup antennas;
+	double scale;
+	ZoomTest() {
+		zFrame = new ZoomTestFrame();
+		zFrame.setVisible(true);
+		scale=zFrame.defaultScale;
+	}
+
+	public void setReader() {
+
+		try {
+			reader = new ImpinjReader();
+			String hostname = "169.254.1.1";
+			System.out.println("Connecting");
+			reader.connect(hostname);
+
+			Settings settings = reader.queryDefaultSettings();
+
+			ReportConfig report = settings.getReport();
+			report.setIncludeAntennaPortNumber(true);
+			report.setMode(ReportMode.Individual);
+			report.setIncludePhaseAngle(true);
+			report.setIncludePeakRssi(true);
+
+			settings.setReaderMode(ReaderMode.AutoSetDenseReader);
+
+			antennas = settings.getAntennas();
+			antennas.disableAll();
+
+			// set some special settings for antenna 1
+			antennas.enableById(new short[] { 1 });
+			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(false);
+			antennas.getAntenna((short) 1).setIsMaxTxPower(false);
+			antennas.getAntenna((short) 1).setTxPowerinDbm(20.0);
+			antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
+
+			// set some special settings for antenna 2
+			antennas.enableById(new short[] { 2 });
+			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
+			antennas.getAntenna((short) 2).setIsMaxTxPower(false);
+			antennas.getAntenna((short) 2).setTxPowerinDbm(20.0);
+			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
+
+			reader.setTagReportListener(this);
+
+			System.out.println("Applying Settings");
+			reader.applySettings(settings);
+
+			System.out.println("Starting");
+			reader.start();
+
+			System.out.println("Press Enter to exit.");
+			Scanner s = new Scanner(System.in);
+			s.nextLine();
+
+			reader.stop();
+			reader.disconnect();
+
+		} catch (OctaneSdkException ex) {
+			System.out.println(ex.getMessage());
+		} catch (Exception ex) {
+			System.out.println(ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+
+	}
+
+	@Override
+	public void onTagReported(ImpinjReader reader, TagReport report) {
+		List<Tag> tags = report.getTags();
+
+		for (Tag t : tags) {
+			if (t.isPeakRssiInDbmPresent()) {
+				double temp = RSSItoScale(t.getPeakRssiInDbm());
+				
+				if (temp != scale ){
+					zFrame.zoom.imagePanel.setScale(temp);
+					scale = temp;
+				}
+				
+			}
+			/*
+			 * System.out.print("EPC: " + t.getEpc().toString());
+			 * 
+			 * if (reader.getName() != null) { System.out.print(" Reader_name: "
+			 * + reader.getName()); } else { System.out.print(" Reader_ip: " +
+			 * reader.getAddress()); }
+			 * 
+			 * if (t.isAntennaPortNumberPresent()) {
+			 * System.out.print(" antenna: " + t.getAntennaPortNumber()); }
+			 * 
+			 * if (t.isFirstSeenTimePresent()) { System.out.print(" first: " +
+			 * t.getFirstSeenTime().ToString()); }
+			 * 
+			 * if (t.isLastSeenTimePresent()) { System.out.print(" last: " +
+			 * t.getLastSeenTime().ToString()); }
+			 * 
+			 * if (t.isSeenCountPresent()) { System.out.print(" count: " +
+			 * t.getTagSeenCount()); }
+			 * 
+			 * if (t.isRfDopplerFrequencyPresent()) {
+			 * System.out.print(" doppler: " + t.getRfDopplerFrequency()); }
+			 * 
+			 * if (t.isPeakRssiInDbmPresent()) { System.out.print(" peak_rssi: "
+			 * + t.getPeakRssiInDbm()); }
+			 * 
+			 * if (t.isRfPhaseAnglePresent()) { System.out.print(" phase: " +
+			 * t.getPhaseAngleInRadians()); }
+			 * 
+			 * if (t.isChannelInMhzPresent()) { System.out.print(" chan_MHz: " +
+			 * t.getChannelInMhz()); }
+			 * 
+			 * if (t.isFastIdPresent()) { System.out.print("\n     fast_id: " +
+			 * t.getTid().toHexString());
+			 * 
+			 * System.out.print(" model: " +
+			 * t.getModelDetails().getModelName());
+			 * 
+			 * System.out.print(" epcsize: " +
+			 * t.getModelDetails().getEpcSizeBits());
+			 * 
+			 * System.out.print(" usermemsize: " +
+			 * t.getModelDetails().getUserMemorySizeBits()); }
+			 * 
+			 * System.out.println("");
+			 */
+
+		}
+
+	}
+
+	private double RSSItoScale(double RSSI){
+		System.out.println(RSSI*0.7/20+1.85);
+		return RSSI*0.7/20+1.85;
+	}
 }

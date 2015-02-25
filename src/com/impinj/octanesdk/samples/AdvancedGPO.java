@@ -98,7 +98,7 @@ public class AdvancedGPO {
             System.out.println("Press Enter to exit.");
             Scanner s = new Scanner(System.in);
             s.nextLine();
-
+            s.close();
             System.out.println("Stopping  " + hostname);
             reader.stop();
 

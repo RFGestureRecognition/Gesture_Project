@@ -12,6 +12,7 @@ public class TagReportListenerImplementation implements TagReportListener {
 
     @Override
     public void onTagReported(ImpinjReader reader, TagReport report) {
+    	
         List<Tag> tags = report.getTags();
 
         for (Tag t : tags) {
