@@ -1,7 +1,18 @@
 package Gesture_Recognition;
 
-import java.util.List;
-import java.util.Scanner;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
@@ -10,27 +21,97 @@ import com.impinj.octanesdk.ReaderMode;
 import com.impinj.octanesdk.ReportConfig;
 import com.impinj.octanesdk.ReportMode;
 import com.impinj.octanesdk.Settings;
-import com.impinj.octanesdk.Tag;
-import com.impinj.octanesdk.TagReport;
-import com.impinj.octanesdk.TagReportListener;
 
-public class ZoomTest implements TagReportListener {
-	ZoomTestFrame zFrame;
+public class ZoomTest extends JFrame {
+
+	// Reader and antennas
 	ImpinjReader reader;
 	AntennaConfigGroup antennas;
-	double scale;
+
+	// For image drawing and scaling
+	ImagePanel imagePanel;
+	JSpinner spinner;
+
+	// Tag list
+	TagListPanel tagListPanel;
+
+	//
+	Parameters par;
+
 	ZoomTest() {
-		zFrame = new ZoomTestFrame();
-		zFrame.setVisible(true);
-		scale=zFrame.defaultScale;
+		par = Parameters.getInstance();
+
+		initUI();
+
 	}
 
-	public void setReader() {
+	private void initUI() {
+		// South Panel
+		JLabel southPanel = new JLabel("Click start to read tags");
+
+		// Center Panel
+		imagePanel = new ImagePanel("./Resources/moon.jpg");
+		
+		
+		
+		// North Panel
+		JPanel northPanel = new JPanel();
+		SpinnerNumberModel model = new SpinnerNumberModel(par.getScale(), 0.1,
+				2, par.getScaleUnit());
+		spinner = new JSpinner(model);
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				float scale = ((Double) spinner.getValue()).floatValue();
+				imagePanel.setScale(scale);
+			}
+		});
+		JButton startButton = new JButton("Start");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startReader(southPanel);
+			}
+		});
+
+		JButton stopButton = new JButton("Stop");
+		stopButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stopReader(southPanel);
+			}
+		});
+
+		JButton closeButton = new JButton("Close");
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				stopReader(southPanel);
+				System.exit(0);
+			}
+		});
+
+		
+		northPanel.add(new JLabel("scale"));
+		northPanel.add(spinner);
+		northPanel.add(startButton);
+		northPanel.add(stopButton);
+		northPanel.add(closeButton);
+
+		// East Panel
+		tagListPanel = new TagListPanel();
+
+		getContentPane().add(northPanel, "North");
+		getContentPane().add(tagListPanel, "East");
+		getContentPane().add(new JScrollPane(imagePanel), "Center");
+		getContentPane().add(southPanel, "South");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(1200, 900);
+		setLocation(100, 50);
+		setVisible(true);
+	}
+
+	public void startReader(JLabel stateLabel) {
 
 		try {
 			reader = new ImpinjReader();
 			String hostname = "169.254.1.1";
-			System.out.println("Connecting");
 			reader.connect(hostname);
 
 			Settings settings = reader.queryDefaultSettings();
@@ -60,96 +141,33 @@ public class ZoomTest implements TagReportListener {
 			antennas.getAntenna((short) 2).setTxPowerinDbm(20.0);
 			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
-			reader.setTagReportListener(this);
+			reader.setTagReportListener(new TagListener(spinner, tagListPanel));
 
-			System.out.println("Applying Settings");
 			reader.applySettings(settings);
 
-			System.out.println("Starting");
 			reader.start();
-
-			System.out.println("Press Enter to exit.");
-			Scanner s = new Scanner(System.in);
-			s.nextLine();
-
-			reader.stop();
-			reader.disconnect();
-
+			stateLabel.setText("Connected");
 		} catch (OctaneSdkException ex) {
-			System.out.println(ex.getMessage());
+			stateLabel.setText(ex.getMessage());
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			stateLabel.setText(ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
 
 	}
 
-	@Override
-	public void onTagReported(ImpinjReader reader, TagReport report) {
-		List<Tag> tags = report.getTags();
-
-		for (Tag t : tags) {
-			if (t.isPeakRssiInDbmPresent()) {
-				double temp = RSSItoScale(t.getPeakRssiInDbm());
-				
-				if (temp != scale ){
-					zFrame.zoom.imagePanel.setScale(temp);
-					scale = temp;
-				}
-				
-			}
-			/*
-			 * System.out.print("EPC: " + t.getEpc().toString());
-			 * 
-			 * if (reader.getName() != null) { System.out.print(" Reader_name: "
-			 * + reader.getName()); } else { System.out.print(" Reader_ip: " +
-			 * reader.getAddress()); }
-			 * 
-			 * if (t.isAntennaPortNumberPresent()) {
-			 * System.out.print(" antenna: " + t.getAntennaPortNumber()); }
-			 * 
-			 * if (t.isFirstSeenTimePresent()) { System.out.print(" first: " +
-			 * t.getFirstSeenTime().ToString()); }
-			 * 
-			 * if (t.isLastSeenTimePresent()) { System.out.print(" last: " +
-			 * t.getLastSeenTime().ToString()); }
-			 * 
-			 * if (t.isSeenCountPresent()) { System.out.print(" count: " +
-			 * t.getTagSeenCount()); }
-			 * 
-			 * if (t.isRfDopplerFrequencyPresent()) {
-			 * System.out.print(" doppler: " + t.getRfDopplerFrequency()); }
-			 * 
-			 * if (t.isPeakRssiInDbmPresent()) { System.out.print(" peak_rssi: "
-			 * + t.getPeakRssiInDbm()); }
-			 * 
-			 * if (t.isRfPhaseAnglePresent()) { System.out.print(" phase: " +
-			 * t.getPhaseAngleInRadians()); }
-			 * 
-			 * if (t.isChannelInMhzPresent()) { System.out.print(" chan_MHz: " +
-			 * t.getChannelInMhz()); }
-			 * 
-			 * if (t.isFastIdPresent()) { System.out.print("\n     fast_id: " +
-			 * t.getTid().toHexString());
-			 * 
-			 * System.out.print(" model: " +
-			 * t.getModelDetails().getModelName());
-			 * 
-			 * System.out.print(" epcsize: " +
-			 * t.getModelDetails().getEpcSizeBits());
-			 * 
-			 * System.out.print(" usermemsize: " +
-			 * t.getModelDetails().getUserMemorySizeBits()); }
-			 * 
-			 * System.out.println("");
-			 */
-
+	public void stopReader(JLabel stateLabel) {
+		try {
+			reader.stop();
+			reader.disconnect();
+			stateLabel.setText("Disconnected");
+		} catch (OctaneSdkException ex) {
+			stateLabel.setText(ex.getMessage());
+		} catch (Exception ex) {
+			stateLabel.setText(ex.getMessage());
+			ex.printStackTrace(System.out);
 		}
 
 	}
 
-	private double RSSItoScale(double RSSI){
-		System.out.println(RSSI*0.7/20+1.85);
-		return RSSI*0.7/20+1.85;
-	}
 }
