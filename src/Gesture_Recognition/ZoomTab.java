@@ -9,16 +9,21 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class ZoomTab extends JPanel {
+import com.impinj.octanesdk.ImpinjReader;
+import com.impinj.octanesdk.TagReport;
+import com.impinj.octanesdk.TagReportListener;
+
+public class ZoomTab extends JPanel  {
 	ImagePanel imagePanel;
 	JSpinner spinner;
 	Parameters par;
+
 	ZoomTab() {
 		par = Parameters.getInstance();
 		imagePanel = new ImagePanel("./Resources/moon.jpg");
 		SpinnerNumberModel model = new SpinnerNumberModel(par.getScale(), 0.1,
 				2, par.getScaleUnit());
-		
+
 		spinner = new JSpinner(model);
 		spinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -34,4 +39,5 @@ public class ZoomTab extends JPanel {
 
 	}
 
+	
 }

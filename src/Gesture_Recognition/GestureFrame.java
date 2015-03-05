@@ -7,8 +7,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
+
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
 import com.impinj.octanesdk.OctaneSdkException;
@@ -23,19 +23,17 @@ public class GestureFrame extends JFrame {
 	ImpinjReader reader;
 	AntennaConfigGroup antennas;
 
-	// Tap list
-	ZoomTab zoomTab;
-	MoveTab moveTab;
+	// Tap 
+	JTabbedPane tab;
 
 	// For image drawing and scaling
-	ImagePanel tap2ImagePanel;
-	JSpinner spinner2;
+	ImagePanel imagePanel;
 
 	// Tag list
 	TagListPanel tagListPanel;
 
 	// State label
-	JLabel southPanel;
+	JLabel stateLabel;
 	// Parameters
 	Parameters par;
 
@@ -47,7 +45,7 @@ public class GestureFrame extends JFrame {
 
 	private void initUI() {
 		// South Panel
-		southPanel = new JLabel("Click start to read tags");
+		stateLabel = new JLabel("Click start to read tags");
 
 		// North Panel
 		JPanel northPanel = new JPanel();
@@ -55,26 +53,25 @@ public class GestureFrame extends JFrame {
 		JButton startButton = new JButton("Start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				startReader(southPanel);
+				startReader(stateLabel);
 			}
 		});
 
 		JButton stopButton = new JButton("Stop");
 		stopButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stopReader(southPanel);
+				stopReader(stateLabel);
 			}
 		});
 
 		JButton closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stopReader(southPanel);
+				stopReader(stateLabel);
 				System.exit(0);
 			}
 		});
 
-		// northPanel.add(spinner);
 		northPanel.add(startButton);
 		northPanel.add(stopButton);
 		northPanel.add(closeButton);
@@ -83,17 +80,19 @@ public class GestureFrame extends JFrame {
 		tagListPanel = new TagListPanel();
 
 		// Center Panel (Taps)
-		JTabbedPane tab = new JTabbedPane();
-		zoomTab = new ZoomTab(); // Tab1
-		moveTab = new MoveTab(); // Tab2
+		tab = new JTabbedPane();
+		ZoomTab zoomTab = new ZoomTab(); // Tab1
+		MoveTab moveTab = new MoveTab(); // Tab2
+		MonitorTab monitorTab = new MonitorTab(); // Tab3
 
-		tab.addTab("Tab1", zoomTab);
-		tab.addTab("Tab2", moveTab);
-		tab.addTab("Tab3", new JPanel());
+		tab.addTab("Zoom", zoomTab);
+		tab.addTab("Move", moveTab);
+		tab.addTab("Monitor", monitorTab);
 
 		getContentPane().add(northPanel, "North");
 		getContentPane().add(tagListPanel, "East");
 		getContentPane().add(tab, "Center");
+		getContentPane().add(stateLabel, "South");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 900);
 		setLocation(100, 50);
@@ -114,6 +113,7 @@ public class GestureFrame extends JFrame {
 			report.setMode(ReportMode.Individual);
 			report.setIncludePhaseAngle(true);
 			report.setIncludePeakRssi(true);
+			report.setIncludeDopplerFrequency(true);
 
 			settings.setReaderMode(ReaderMode.AutoSetDenseReader);
 
@@ -124,17 +124,17 @@ public class GestureFrame extends JFrame {
 			antennas.enableById(new short[] { 1 });
 			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(false);
 			antennas.getAntenna((short) 1).setIsMaxTxPower(false);
-			antennas.getAntenna((short) 1).setTxPowerinDbm(20.0);
+			antennas.getAntenna((short) 1).setTxPowerinDbm(30.0);
 			antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
 			// set some special settings for antenna 2
 			antennas.enableById(new short[] { 2 });
 			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
 			antennas.getAntenna((short) 2).setIsMaxTxPower(false);
-			antennas.getAntenna((short) 2).setTxPowerinDbm(20.0);
+			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
 			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
-			reader.setTagReportListener(new TagListener(zoomTab.spinner,
+			reader.setTagReportListener(new TagListener(tab,
 					tagListPanel));
 
 			reader.applySettings(settings);

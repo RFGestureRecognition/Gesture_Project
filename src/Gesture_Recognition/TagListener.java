@@ -1,65 +1,106 @@
 package Gesture_Recognition;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 
 import com.impinj.octanesdk.ImpinjReader;
 import com.impinj.octanesdk.Tag;
 import com.impinj.octanesdk.TagReport;
 import com.impinj.octanesdk.TagReportListener;
 
-public class TagListener implements TagReportListener{
+public class TagListener implements TagReportListener {
 	JSpinner spinner;
 	TagListPanel tagListPanel;
 	Parameters par;
-	
-	
-	TagListener(JSpinner spinner, TagListPanel tagListPanel){
-		this.spinner = spinner;
+	JTabbedPane tab;
+	ArrayList<JLabel> monitorList;
+	int antennaNum;
+	int paraNum;
+
+	TagListener(JTabbedPane tab, TagListPanel tagListPanel) {
 		this.tagListPanel = tagListPanel;
 		par = Parameters.getInstance();
+		this.tab = tab;
+		spinner = ((ZoomTab) tab.getComponentAt(0)).spinner;
+		monitorList = ((MonitorTab) tab.getComponentAt(2)).jLabelList;
+		antennaNum = ((MonitorTab) tab.getComponentAt(2)).antennaNum;
+		paraNum = ((MonitorTab) tab.getComponentAt(2)).paraNum;
 	}
-	
+
 	@Override
 	public void onTagReported(ImpinjReader reader, TagReport report) {
 		List<Tag> tags = report.getTags();
-		System.out.println("reported");
+
 		for (Tag t : tags) {
 			tagListPanel.addTag(t);
+			switch (tab.getSelectedIndex()) {
+			case 0:
+				zoomTabListener(t);
+				break;
+			case 1:
+				moveTablListener(t);
+				break;
+			case 2:
+				monitorTabListener(t);
+				break;
 
-			if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
-				// phaseZoom(t);
-				RSSIZoom(t);
-				// specReport(t);
 			}
+
 		}
 
 	}
 
-	private void phaseZoom(Tag t) {
+	private void moveTablListener(Tag t) {
 
 	}
 
-	private void RSSIZoom(Tag t) {
-		if (t.isPeakRssiInDbmPresent()) {
-			double curScale = RSSItoScale(t.getPeakRssiInDbm());
-			if (Double.compare(curScale, par.getTempScale()) != 0) {
-				System.out.println(curScale + " : " + par.getTempScale()
-						+ " : " + par.getCounter());
-				par.setTempScale(curScale);
+	private void monitorTabListener(Tag t) {
+		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					monitorList.get(j).setText(t.getPhaseAngleInRadians() + "");
+				monitorList.get(2).setText(Double.parseDouble(monitorList.get(0).getText())-Double.parseDouble(monitorList.get(1).getText())+"" );
+			}
+			
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					monitorList.get(j + 2 * antennaNum).setText(
+							t.getPeakRssiInDbm() + "");
+			}
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					monitorList.get(j + 3 * antennaNum).setText(
+							t.getRfDopplerFrequency()+"");
+			}
+		}
+	}
 
-			} else {
-				par.addCounter(1);
-				if (par.getCounter() > 3) {
-					spinner.setValue(par.getTempScale());
-					par.setScale(curScale);
-					par.setCounterZero();
+	private void zoomTabListener(Tag t) {
+
+		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
+
+			if (t.isPeakRssiInDbmPresent()) {
+				double curScale = RSSItoScale(t.getPeakRssiInDbm());
+				if (Double.compare(curScale, par.getTempScale()) != 0) {
+					System.out.println(curScale + " : " + par.getTempScale()
+							+ " : " + par.getCounter());
+					par.setTempScale(curScale);
+
+				} else {
+					par.addCounter(1);
+					if (par.getCounter() > 3) {
+						spinner.setValue(par.getTempScale());
+						par.setScale(curScale);
+						par.setCounterZero();
+					}
 				}
+
 			}
-
 		}
-
 	}
 
 	private void specReport(Tag t, ImpinjReader reader) {
