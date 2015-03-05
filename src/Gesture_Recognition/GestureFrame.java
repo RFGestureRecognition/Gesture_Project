@@ -1,9 +1,5 @@
 package Gesture_Recognition;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,10 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
 import com.impinj.octanesdk.OctaneSdkException;
@@ -25,41 +17,41 @@ import com.impinj.octanesdk.ReportConfig;
 import com.impinj.octanesdk.ReportMode;
 import com.impinj.octanesdk.Settings;
 
-public class ZoomTest extends JFrame {
+public class GestureFrame extends JFrame {
 
 	// Reader and antennas
 	ImpinjReader reader;
 	AntennaConfigGroup antennas;
 
+	// Tap list
+	ZoomTab zoomTab;
+	MoveTab moveTab;
+
 	// For image drawing and scaling
-	ImagePanel imagePanel, imagePanel2;
-	JSpinner spinner, spinner2;
+	ImagePanel tap2ImagePanel;
+	JSpinner spinner2;
 
 	// Tag list
 	TagListPanel tagListPanel;
 
-	//
+	// State label
+	JLabel southPanel;
+	// Parameters
 	Parameters par;
 
-	ZoomTest() {
+	GestureFrame() {
 		par = Parameters.getInstance();
-
 		initUI();
 
 	}
 
 	private void initUI() {
 		// South Panel
-		final JLabel southPanel = new JLabel("Click start to read tags");
+		southPanel = new JLabel("Click start to read tags");
 
-		
-		
-		
 		// North Panel
 		JPanel northPanel = new JPanel();
-		
-		
-		
+
 		JButton startButton = new JButton("Start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -82,63 +74,25 @@ public class ZoomTest extends JFrame {
 			}
 		});
 
-		
-		//northPanel.add(spinner);
+		// northPanel.add(spinner);
 		northPanel.add(startButton);
 		northPanel.add(stopButton);
 		northPanel.add(closeButton);
 
 		// East Panel
 		tagListPanel = new TagListPanel();
-		
-		// Center Panel
 
-		imagePanel = new ImagePanel("./Resources/moon.jpg");
-		imagePanel2 = new ImagePanel("./Resources/moon.jpg");
-		
-		// Tab1
-		SpinnerNumberModel model = new SpinnerNumberModel(par.getScale(), 0.1,
-				2, par.getScaleUnit());
-		spinner = new JSpinner(model);
-		spinner.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				float scale = ((Double) spinner.getValue()).floatValue();
-				imagePanel.setScale(scale);
-			}
-		});
-		
-		JPanel Tab1Panel = new JPanel();
-		Tab1Panel.setLayout(new BorderLayout());
-
-		Tab1Panel.add("North", spinner);
-		Tab1Panel.add("Center", imagePanel);
-		
-		// Tab2
-		SpinnerNumberModel model2 = new SpinnerNumberModel(100,0,200,10);
-		spinner2 = new JSpinner(model2);
-		spinner2.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				int location = (int) spinner2.getValue();
-				imagePanel2.setLocation(location-50, 0);
-			}
-		});
-		
-		JPanel Tab2Panel = new JPanel();
-		Tab2Panel.setLayout(new BorderLayout());
-		Tab2Panel.add("North", spinner2);
-		Tab2Panel.add("Center", imagePanel2);
-		Tab2Panel.setBackground(Color.BLACK);
-		
+		// Center Panel (Taps)
 		JTabbedPane tab = new JTabbedPane();
-		tab.addTab("Tab1", Tab1Panel);
-		tab.addTab("Tab2", Tab2Panel);
+		zoomTab = new ZoomTab(); // Tab1
+		moveTab = new MoveTab(); // Tab2
+
+		tab.addTab("Tab1", zoomTab);
+		tab.addTab("Tab2", moveTab);
 		tab.addTab("Tab3", new JPanel());
-		
-		
 
 		getContentPane().add(northPanel, "North");
 		getContentPane().add(tagListPanel, "East");
-		//getContentPane().add(new JScrollPane(imagePanel), "Center");
 		getContentPane().add(tab, "Center");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 900);
@@ -180,7 +134,8 @@ public class ZoomTest extends JFrame {
 			antennas.getAntenna((short) 2).setTxPowerinDbm(20.0);
 			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
-			reader.setTagReportListener(new TagListener(spinner, tagListPanel));
+			reader.setTagReportListener(new TagListener(zoomTab.spinner,
+					tagListPanel));
 
 			reader.applySettings(settings);
 

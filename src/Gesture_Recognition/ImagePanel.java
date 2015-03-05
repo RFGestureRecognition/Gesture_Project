@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -17,8 +18,11 @@ import javax.swing.JPanel;
 public class ImagePanel extends JPanel {
 	BufferedImage image;
 	Parameters par;
+	Double scale = 0.1;
+	Point point;
 
 	public ImagePanel(String filepath) {
+		point = new Point(0,0);
 		par = Parameters.getInstance();
 		loadImage(filepath);
 		setBackground(Color.black);
@@ -33,10 +37,10 @@ public class ImagePanel extends JPanel {
 		int h = getHeight();
 		int imageWidth = image.getWidth();
 		int imageHeight = image.getHeight();
-		double x = (w - par.getScale() * imageWidth) / 2;
-		double y = (h - par.getScale() * imageHeight) / 2;
-		AffineTransform at = AffineTransform.getTranslateInstance(x, y);
-		at.scale(par.getScale(), par.getScale());
+		double x = (w - scale * imageWidth) / 2;
+		double y = (h - scale * imageHeight) / 2;
+		AffineTransform at = AffineTransform.getTranslateInstance(point.getX()+x, point.getY()+y);
+		at.scale(scale, scale);
 		g2.drawRenderedImage(image, at);
 	}
 
@@ -50,7 +54,13 @@ public class ImagePanel extends JPanel {
 	}
 
 	public void setScale(double s) {
-		par.setScale(s);
+		scale = s;
+		revalidate(); // update the scroll pane
+		repaint();
+	}
+
+	public void setImageLocation(double x, double y) {
+		point.setLocation(x, y);
 		revalidate(); // update the scroll pane
 		repaint();
 	}
@@ -66,4 +76,3 @@ public class ImagePanel extends JPanel {
 		}
 	}
 }
-
