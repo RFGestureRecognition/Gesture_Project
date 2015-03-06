@@ -15,24 +15,24 @@ import javax.swing.event.ListSelectionListener;
 import com.impinj.octanesdk.Tag;
 
 public class TagListPanel extends JPanel {
-
-	JLabel label;
-	JScrollPane pane;
-	JList tagList;
+	private static TagListPanel sigleton = new TagListPanel();
+	private JLabel label;
+	private JScrollPane pane;
+	private JList<String> tagList;
 
 	DefaultListModel<String> listModel;
 
-	Parameters par;
+	public static TagListPanel getInstance() {
+		return sigleton;
+	}
 
-	TagListPanel() {
-		par = Parameters.getInstance();
+	private TagListPanel() {
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
 		listModel = new DefaultListModel<String>();
 
-
-		tagList = new JList(listModel);
+		tagList = new JList<String>(listModel);
 		tagList.addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -61,6 +61,5 @@ public class TagListPanel extends JPanel {
 	public String getSelectedTag() {
 		return tagList.getSelectedValue().toString();
 	}
-	
-	
+
 }

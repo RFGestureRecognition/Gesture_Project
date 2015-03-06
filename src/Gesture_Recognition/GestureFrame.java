@@ -2,6 +2,7 @@ package Gesture_Recognition;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import com.impinj.octanesdk.AntennaConfig;
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
 import com.impinj.octanesdk.OctaneSdkException;
@@ -23,8 +25,8 @@ public class GestureFrame extends JFrame {
 	ImpinjReader reader;
 	AntennaConfigGroup antennas;
 
-	// Tap 
-	JTabbedPane tab;
+	// Tap
+	TabManager tabManager;
 
 	// For image drawing and scaling
 	ImagePanel imagePanel;
@@ -77,21 +79,21 @@ public class GestureFrame extends JFrame {
 		northPanel.add(closeButton);
 
 		// East Panel
-		tagListPanel = new TagListPanel();
+		tagListPanel = TagListPanel.getInstance();
 
 		// Center Panel (Taps)
-		tab = new JTabbedPane();
+		tabManager = new TabManager();
 		ZoomTab zoomTab = new ZoomTab(); // Tab1
 		MoveTab moveTab = new MoveTab(); // Tab2
 		MonitorTab monitorTab = new MonitorTab(); // Tab3
 
-		tab.addTab("Zoom", zoomTab);
-		tab.addTab("Move", moveTab);
-		tab.addTab("Monitor", monitorTab);
+		tabManager.addTab("Zoom", zoomTab);
+		tabManager.addTab("Move", moveTab);
+		tabManager.addTab("Monitor", monitorTab);
 
 		getContentPane().add(northPanel, "North");
 		getContentPane().add(tagListPanel, "East");
-		getContentPane().add(tab, "Center");
+		getContentPane().add(tabManager, "Center");
 		getContentPane().add(stateLabel, "South");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 900);
@@ -107,14 +109,13 @@ public class GestureFrame extends JFrame {
 			reader.connect(hostname);
 
 			Settings settings = reader.queryDefaultSettings();
-
 			ReportConfig report = settings.getReport();
 			report.setIncludeAntennaPortNumber(true);
 			report.setMode(ReportMode.Individual);
 			report.setIncludePhaseAngle(true);
 			report.setIncludePeakRssi(true);
 			report.setIncludeDopplerFrequency(true);
-
+			report.setIncludeChannel(true);
 			settings.setReaderMode(ReaderMode.AutoSetDenseReader);
 
 			antennas = settings.getAntennas();
@@ -124,7 +125,7 @@ public class GestureFrame extends JFrame {
 			antennas.enableById(new short[] { 1 });
 			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(false);
 			antennas.getAntenna((short) 1).setIsMaxTxPower(false);
-			antennas.getAntenna((short) 1).setTxPowerinDbm(30.0);
+			antennas.getAntenna((short) 1).setTxPowerinDbm(20.0);
 			antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
 			// set some special settings for antenna 2
@@ -134,8 +135,7 @@ public class GestureFrame extends JFrame {
 			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
 			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
-			reader.setTagReportListener(new TagListener(tab,
-					tagListPanel));
+			reader.setTagReportListener(tabManager);
 
 			reader.applySettings(settings);
 

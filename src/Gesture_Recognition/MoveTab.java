@@ -2,13 +2,14 @@ package Gesture_Recognition;
 
 import java.awt.BorderLayout;
 
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class MoveTab extends JPanel{
+import com.impinj.octanesdk.Tag;
+
+public class MoveTab extends Tab{
 
 	ImagePanel imagePanel;
 	JSpinner spinner;
@@ -31,6 +32,12 @@ public class MoveTab extends JPanel{
 
 		add("North", spinner);
 		add("Center", imagePanel);
+	}
+
+	@Override
+	void onTagReported(Tag t) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 

@@ -4,15 +4,16 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
-public class MonitorTab extends JPanel {
+import com.impinj.octanesdk.Tag;
+
+public class MonitorTab extends Tab {
 	ArrayList<JLabel> jLabelList;
 	int antennaNum = 2;
 	int paraNum = 4;
-
+	TagListPanel tagListPanel;
 	MonitorTab() {
-
+		tagListPanel = TagListPanel.getInstance();
 		ArrayList<String> paraNames = new ArrayList<String>();
 		jLabelList = new ArrayList<JLabel>();
 
@@ -21,7 +22,7 @@ public class MonitorTab extends JPanel {
 		}
 
 		paraNames.add("Phase");
-		paraNames.add("Phase Diff");
+		paraNames.add("TX Freq");
 		paraNames.add("RSSI");
 		paraNames.add("DopplerFreq");
 
@@ -39,5 +40,32 @@ public class MonitorTab extends JPanel {
 			}
 		}
 
+	}
+
+	@Override
+	void onTagReported(Tag t) {
+		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					jLabelList.get(j).setText(t.getPhaseAngleInRadians() + "");
+			}
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					jLabelList.get(j + antennaNum).setText(
+							t.getChannelInMhz() + "");
+			}
+
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					jLabelList.get(j + 2 * antennaNum).setText(
+							t.getPeakRssiInDbm() + "");
+			}
+			for (int j = 0; j < antennaNum; j++) {
+				if ((t.getAntennaPortNumber() - 1) == j)
+					jLabelList.get(j + 3 * antennaNum).setText(
+							t.getRfDopplerFrequency() + "");
+			}
+		}
+		
 	}
 }
