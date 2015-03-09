@@ -70,6 +70,7 @@ public class GestureFrame extends JFrame {
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				stopReader(stateLabel);
+				tabManager.stop();
 				System.exit(0);
 			}
 		});
@@ -116,24 +117,27 @@ public class GestureFrame extends JFrame {
 			report.setIncludePeakRssi(true);
 			report.setIncludeDopplerFrequency(true);
 			report.setIncludeChannel(true);
-			settings.setReaderMode(ReaderMode.AutoSetDenseReader);
+			report.setIncludeLastSeenTime(true);
+			//settings.setReaderMode(ReaderMode.AutoSetDenseReader);
+			settings.setReaderMode(ReaderMode.AutoSetSingleReader);
 
 			antennas = settings.getAntennas();
 			antennas.disableAll();
-
+			antennas.enableAll();
+			
 			// set some special settings for antenna 1
 			antennas.enableById(new short[] { 1 });
-			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(false);
+			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(true);
 			antennas.getAntenna((short) 1).setIsMaxTxPower(false);
-			antennas.getAntenna((short) 1).setTxPowerinDbm(20.0);
-			antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
+			antennas.getAntenna((short) 1).setTxPowerinDbm(30.0);
+			//antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
-			// set some special settings for antenna 2
-			antennas.enableById(new short[] { 2 });
-			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
-			antennas.getAntenna((short) 2).setIsMaxTxPower(false);
-			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
-			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
+//			// set some special settings for antenna 2
+//			antennas.enableById(new short[] { 2 });
+//			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
+//			antennas.getAntenna((short) 2).setIsMaxTxPower(false);
+//			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
+//			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
 			reader.setTagReportListener(tabManager);
 
@@ -154,7 +158,9 @@ public class GestureFrame extends JFrame {
 		try {
 			reader.stop();
 			reader.disconnect();
+			
 			stateLabel.setText("Disconnected");
+			
 		} catch (OctaneSdkException ex) {
 			stateLabel.setText(ex.getMessage());
 		} catch (Exception ex) {

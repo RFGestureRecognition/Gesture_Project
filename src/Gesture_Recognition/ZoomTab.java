@@ -68,4 +68,10 @@ public class ZoomTab extends Tab  {
 			temp = 0.05;
 		return Math.round(scale * 100d) / 100d;
 	}
+
+	@Override
+	void stop() {
+		// TODO Auto-generated method stub
+		
+	}
 }

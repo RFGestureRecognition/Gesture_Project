@@ -39,6 +39,12 @@ public class MoveTab extends Tab{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	void stop() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

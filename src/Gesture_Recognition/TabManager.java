@@ -34,8 +34,14 @@ public class TabManager extends JTabbedPane implements TagReportListener {
 	Tab getSelectedTab() {
 		return (Tab) getSelectedComponent();
 	}
+	
+	void stop(){
+		for(int i=0; i<getComponentCount(); i++)
+			((Tab) getComponentAt(i)).stop();
+	}
 }
 
 abstract class Tab extends JPanel {
 	abstract void onTagReported(Tag t);
+	abstract void stop();
 }
