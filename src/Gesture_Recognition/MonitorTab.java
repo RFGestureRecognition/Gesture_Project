@@ -3,7 +3,10 @@ package Gesture_Recognition;
 import java.awt.GridLayout;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JLabel;
 
@@ -20,8 +23,10 @@ public class MonitorTab extends Tab {
 	FileWriter writer;
 	MonitorTab() {
 		try {
-			writer = new FileWriter("Results/test.txt");
-			writer.write(Num+"\tRSSI\tFrequency\tPhase");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
+			Date date = new Date();
+			writer = new FileWriter("Results/"+dateFormat.format(date));
+			writer.write("Num\tRSSI\tFrequency\tPhase\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,16 +65,20 @@ public class MonitorTab extends Tab {
 
 	@Override
 	void onTagReported(Tag t) {
-		reportNum++;
-		try {
-			writer.write(reportNum+"\t"+t.getPeakRssiInDbm()+"\t"+t.getChannelInMhz()+"\t"+t.getPhaseAngleInRadians());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+
 		
 		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
+			
+			// file write
+			reportNum++;
+			try {
+				writer.write(reportNum+"\t"+t.getPeakRssiInDbm()+"\t"+t.getChannelInMhz()+"\t"+t.getPhaseAngleInRadians()+"\n");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 			for (int j = 0; j < antennaNum; j++) {
 				if ((t.getAntennaPortNumber() - 1) == j)
 					jLabelList.get(j).setText(t.getPhaseAngleInRadians() + "");
