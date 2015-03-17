@@ -5,9 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
 import javax.swing.JLabel;
 
 import com.impinj.octanesdk.Tag;
@@ -20,18 +18,19 @@ public class MonitorTab extends Tab {
 	double phase1;
 	double phase2;
 	int reportNum = 0;
+	Parameters par;
 	FileWriter writer;
 	MonitorTab() {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
 			Date date = new Date();
-			writer = new FileWriter("Results/"+dateFormat.format(date));
-			writer.write("Num\tRSSI\tFrequency\tPhase\n");
+			writer = new FileWriter("Results/"+dateFormat.format(date)+".txt");
+			writer.write("Num\tRSSI\tFrequency\tPhase\r\n");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		par = Parameters.getInstance();
 		phase1 = 0;
 		phase2 = 0;
 		tagListPanel = TagListPanel.getInstance();
@@ -64,29 +63,37 @@ public class MonitorTab extends Tab {
 	}
 
 	@Override
-	void onTagReported(Tag t) {
+	void onTagReported(final Tag t) {
 
 		
 		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
 			
 			// file write
 			reportNum++;
+			if(reportNum > 1000){
+				stop();
+				System.exit(1);
+			}
 			try {
-				writer.write(reportNum+"\t"+t.getPeakRssiInDbm()+"\t"+t.getChannelInMhz()+"\t"+t.getPhaseAngleInRadians()+"\n");
+				writer.write(reportNum+"\t"+t.getPeakRssiInDbm()+"\t"+t.getChannelInMhz()+"\t"+t.getPhaseAngleInRadians()+"\r\n");
+	
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 			
 			
+			jLabelList.get(1).setText(Integer.toString(reportNum));
 			for (int j = 0; j < antennaNum; j++) {
-				if ((t.getAntennaPortNumber() - 1) == j)
+				if ((t.getAntennaPortNumber() - 1) == j){
 					jLabelList.get(j).setText(t.getPhaseAngleInRadians() + "");
+					
+				}
 			}
 			for (int j = 0; j < antennaNum; j++) {
-				if ((t.getAntennaPortNumber() - 1) == j)
-					jLabelList.get(j + antennaNum).setText(
-							t.getChannelInMhz() + "");
+				if ((t.getAntennaPortNumber() - 1) == j){
+					jLabelList.get(j + antennaNum).setText(t.getChannelInMhz() + "");
+				}
 			}
 
 			for (int j = 0; j < antennaNum; j++) {

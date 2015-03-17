@@ -7,6 +7,7 @@ public class Parameters {
 	private double scaleUnit = 0.1;
 	private double counter = 0;
 	private double moveScale = 20;
+
 	
 	private Parameters() {
 	}
@@ -47,8 +48,13 @@ public class Parameters {
 		this.scale = scale;
 	}
 	
+	public void setMoveSacle(double moveScale){
+		this.moveScale = moveScale;
+	}
 	public double getMoveSacle(){
 		return moveScale;
 	}
+	
+
 	
 }

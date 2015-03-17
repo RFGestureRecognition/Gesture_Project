@@ -15,7 +15,7 @@ import javax.swing.event.ListSelectionListener;
 import com.impinj.octanesdk.Tag;
 
 public class TagListPanel extends JPanel {
-	private static TagListPanel sigleton = new TagListPanel();
+	private static TagListPanel singleTon = new TagListPanel();
 	private JLabel label;
 	private JScrollPane pane;
 	private JList<String> tagList;
@@ -23,7 +23,7 @@ public class TagListPanel extends JPanel {
 	DefaultListModel<String> listModel;
 
 	public static TagListPanel getInstance() {
-		return sigleton;
+		return singleTon;
 	}
 
 	private TagListPanel() {
@@ -48,7 +48,7 @@ public class TagListPanel extends JPanel {
 		add(pane);
 
 		label = new JLabel("Select the tag");
-		;
+
 		add(label, BorderLayout.SOUTH);
 	}
 

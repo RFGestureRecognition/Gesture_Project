@@ -2,15 +2,10 @@ package Gesture_Recognition;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
-import com.impinj.octanesdk.AntennaConfig;
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
 import com.impinj.octanesdk.OctaneSdkException;
@@ -35,7 +30,7 @@ public class GestureFrame extends JFrame {
 	TagListPanel tagListPanel;
 
 	// State label
-	JLabel stateLabel;
+	StatePanel statePanel;
 	// Parameters
 	Parameters par;
 
@@ -47,7 +42,11 @@ public class GestureFrame extends JFrame {
 
 	private void initUI() {
 		// South Panel
-		stateLabel = new JLabel("Click start to read tags");
+		statePanel = StatePanel.getInstance();
+		statePanel.setText("Click start to read tags");
+
+		// East Panel
+		tagListPanel = TagListPanel.getInstance();
 
 		// North Panel
 		JPanel northPanel = new JPanel();
@@ -55,21 +54,21 @@ public class GestureFrame extends JFrame {
 		JButton startButton = new JButton("Start");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				startReader(stateLabel);
+				startReader();
 			}
 		});
 
 		JButton stopButton = new JButton("Stop");
 		stopButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stopReader(stateLabel);
+				stopReader();
 			}
 		});
 
 		JButton closeButton = new JButton("Close");
 		closeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				stopReader(stateLabel);
+				stopReader();
 				tabManager.stop();
 				System.exit(0);
 			}
@@ -79,31 +78,29 @@ public class GestureFrame extends JFrame {
 		northPanel.add(stopButton);
 		northPanel.add(closeButton);
 
-		// East Panel
-		tagListPanel = TagListPanel.getInstance();
-
 		// Center Panel (Taps)
 		tabManager = new TabManager();
 		ZoomTab zoomTab = new ZoomTab(); // Tab1
 		MoveTab moveTab = new MoveTab(); // Tab2
 		MonitorTab monitorTab = new MonitorTab(); // Tab3
+		GraphTab graphTab = new GraphTab(); // Tab3
 
 		tabManager.addTab("Zoom", zoomTab);
 		tabManager.addTab("Move", moveTab);
 		tabManager.addTab("Monitor", monitorTab);
+		tabManager.addTab("Graph", graphTab);
 
 		getContentPane().add(northPanel, "North");
 		getContentPane().add(tagListPanel, "East");
+		getContentPane().add(statePanel, "South");
 		getContentPane().add(tabManager, "Center");
-		getContentPane().add(stateLabel, "South");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1200, 900);
 		setLocation(100, 50);
 		setVisible(true);
 	}
 
-	public void startReader(JLabel stateLabel) {
-
+	public void startReader() {
 		try {
 			reader = new ImpinjReader();
 			String hostname = "169.254.1.1";
@@ -118,53 +115,55 @@ public class GestureFrame extends JFrame {
 			report.setIncludeDopplerFrequency(true);
 			report.setIncludeChannel(true);
 			report.setIncludeLastSeenTime(true);
-			//settings.setReaderMode(ReaderMode.AutoSetDenseReader);
-			settings.setReaderMode(ReaderMode.AutoSetSingleReader);
+			// settings.setReaderMode(ReaderMode.AutoSetmDenseReader);
+			settings.setReaderMode(ReaderMode.MaxThroughput);
+			// settings.setTxFrequenciesInMhz(txFrequenciesInMhz)
 
 			antennas = settings.getAntennas();
 			antennas.disableAll();
 			antennas.enableAll();
-			
+
 			// set some special settings for antenna 1
 			antennas.enableById(new short[] { 1 });
 			antennas.getAntenna((short) 1).setIsMaxRxSensitivity(true);
-			antennas.getAntenna((short) 1).setIsMaxTxPower(false);
+			antennas.getAntenna((short) 1).setIsMaxTxPower(true);
 			antennas.getAntenna((short) 1).setTxPowerinDbm(30.0);
-			//antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
+			// antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
-//			// set some special settings for antenna 2
-//			antennas.enableById(new short[] { 2 });
-//			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
-//			antennas.getAntenna((short) 2).setIsMaxTxPower(false);
-//			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
-//			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
+			// // set some special settings for antenna 2
+			// antennas.enableById(new short[] { 2 });
+			// antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
+			// antennas.getAntenna((short) 2).setIsMaxTxPower(false);
+			// antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
+			// antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
 			reader.setTagReportListener(tabManager);
 
 			reader.applySettings(settings);
 
 			reader.start();
-			stateLabel.setText("Connected");
+			statePanel.setText("Connected");
+
 		} catch (OctaneSdkException ex) {
-			stateLabel.setText(ex.getMessage());
+			statePanel.setText(ex.getMessage());
 		} catch (Exception ex) {
-			stateLabel.setText(ex.getMessage());
+			statePanel.setText(ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
 
 	}
 
-	public void stopReader(JLabel stateLabel) {
+	public void stopReader() {
 		try {
 			reader.stop();
 			reader.disconnect();
-			
-			stateLabel.setText("Disconnected");
-			
+
+			statePanel.setText("Disconnected");
+
 		} catch (OctaneSdkException ex) {
-			stateLabel.setText(ex.getMessage());
+			statePanel.setText(ex.getMessage());
 		} catch (Exception ex) {
-			stateLabel.setText(ex.getMessage());
+			statePanel.setText(ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
 

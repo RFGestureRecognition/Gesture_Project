@@ -2,7 +2,6 @@ package Gesture_Recognition;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -57,6 +56,7 @@ public class ZoomTab extends Tab  {
 				}
 
 			}
+		
 		}
 		
 	}
