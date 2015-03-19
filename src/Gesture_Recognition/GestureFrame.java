@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import com.impinj.octanesdk.AntennaConfigGroup;
 import com.impinj.octanesdk.ImpinjReader;
@@ -131,11 +130,11 @@ public class GestureFrame extends JFrame {
 			// antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
 			// // set some special settings for antenna 2
-			// antennas.enableById(new short[] { 2 });
-			// antennas.getAntenna((short) 2).setIsMaxRxSensitivity(false);
-			// antennas.getAntenna((short) 2).setIsMaxTxPower(false);
-			// antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
-			// antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
+			antennas.enableById(new short[] { 2 });
+			antennas.getAntenna((short) 2).setIsMaxRxSensitivity(true);
+			antennas.getAntenna((short) 2).setIsMaxTxPower(true);
+			antennas.getAntenna((short) 2).setTxPowerinDbm(30.0);
+			antennas.getAntenna((short) 2).setRxSensitivityinDbm(-70);
 
 			reader.setTagReportListener(tabManager);
 
@@ -155,6 +154,7 @@ public class GestureFrame extends JFrame {
 
 	public void stopReader() {
 		try {
+			
 			reader.stop();
 			reader.disconnect();
 

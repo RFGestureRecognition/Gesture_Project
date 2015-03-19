@@ -10,8 +10,6 @@ import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -22,15 +20,19 @@ public class GraphPanel extends JPanel {
    private static final int PREF_H = 1000;
    private static final int BORDER_GAP = 30;
    private static final Color GRAPH_POINT_COLOR = new Color(150, 50, 50, 180);
+   private static final Color blue = Color.blue;
+   private static final Color red = Color.red;
    private static final int GRAPH_POINT_WIDTH = 12;
    private static final int Y_HATCH_CNT = 10;
    private List<Integer> scores;
    public static List<Point> point;
+   public static List<Point> pointAnte2;
    
    int count;
 
    public GraphPanel(){
 		point = new ArrayList<Point>();
+		pointAnte2 = new ArrayList<Point>();
 		// point.add(new Point(3,5));
 		GraphPanel mainPanel = new GraphPanel(point);
 
@@ -72,7 +74,7 @@ public class GraphPanel extends JPanel {
       }
 
       // and for x axis
-      for (int i = 0; i < point.size(); i++) {
+      for (int i = 0; i < 100; i++) {
          int x0 = (i + 1) * (getWidth() - BORDER_GAP * 2) / 100 + BORDER_GAP;
          int x1 = x0;
          int y0 = getHeight() - BORDER_GAP;
@@ -82,7 +84,8 @@ public class GraphPanel extends JPanel {
 
       Stroke oldStroke = g2.getStroke();
       g2.setStroke(oldStroke);      
-      g2.setColor(GRAPH_POINT_COLOR);
+      // Antenna1 point
+      g2.setColor(red);
       for (int i = 0;i<point.size(); i++) {
          int x = point.get(i).x;
          int y = point.get(i).y;
@@ -90,6 +93,17 @@ public class GraphPanel extends JPanel {
          int ovalH = GRAPH_POINT_WIDTH;
          g2.fillOval(x, y, ovalW, ovalH);
       }
+      
+      // Antenna2 point
+      g2.setColor(blue);
+      for (int i = 0;i<pointAnte2.size(); i++) {
+         int x = pointAnte2.get(i).x;
+         int y = pointAnte2.get(i).y;
+         int ovalW = GRAPH_POINT_WIDTH;
+         int ovalH = GRAPH_POINT_WIDTH;
+         g2.fillOval(x, y, ovalW, ovalH);
+      }
+      
       g.drawImage(img, 0, 0, this);
    }
 
@@ -98,46 +112,16 @@ public class GraphPanel extends JPanel {
       return new Dimension(PREF_W, PREF_H);
    }
    
-   void Func(int x, int y){
-	   point.add(new Point(x,y));
-	   count++;
-	   if(count>10){
-		   repaint();
-		   //paintComponent(this.getGraphics());
-		   count = 0;
-	   }
+   void Func(int x, int y, int antenna){
+	   if(antenna == 1)
+		   point.add(new Point(x,y));
+	   else if(antenna == 2)
+		   pointAnte2.add(new Point(x,y));
+	   repaint();
    }
    
    void Clear(){
 	   point.clear();
+	   pointAnte2.clear();
    }
-
-   static void createAndShowGui() {
-	  
-      List<Integer> scores = new ArrayList<Integer>();
-      Random random = new Random();
-      int maxDataPoints = 16;
-      int maxScore = 20;
-      for (int i = 0; i < maxDataPoints ; i++) {
-         scores.add(random.nextInt(maxScore));
-      }
-      point = new ArrayList<Point>();
-      //point.add(new Point(3,5));
-      GraphPanel mainPanel = new GraphPanel(point);
-
-      JFrame frame = new JFrame("DrawGraph");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.getContentPane().add(mainPanel);
-      frame.pack();
-      frame.setLocationByPlatform(true);
-      frame.setVisible(true);
-   }
-
-//   public static void main(String[] args) {
-//      SwingUtilities.invokeLater(new Runnable() {
-//         public void run() {
-//            createAndShowGui();
-//         }
-//      });
-//   }
 }

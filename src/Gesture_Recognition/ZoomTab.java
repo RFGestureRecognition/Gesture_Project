@@ -43,6 +43,7 @@ public class ZoomTab extends Tab  {
 
 			if (t.isPeakRssiInDbmPresent()) {
 				double curScale = RSSItoScale(t.getPeakRssiInDbm());
+				
 				if (Double.compare(curScale, par.getTempScale()) != 0) {
 					par.setTempScale(curScale);
 
@@ -52,6 +53,7 @@ public class ZoomTab extends Tab  {
 						spinner.setValue(par.getTempScale());
 						par.setScale(curScale);
 						par.setCounterZero();
+						
 					}
 				}
 

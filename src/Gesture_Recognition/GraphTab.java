@@ -38,7 +38,7 @@ public class GraphTab extends Tab {
 		if (tagListPanel.getSelectedTag().equals(t.getEpc().toString())) {
 
 			if (t.isPeakRssiInDbmPresent()) {				
-				graphPanel.Func((int)(t.getChannelInMhz()-902.25)*20+30, (int)(t.getPhaseAngleInRadians()*100));
+				graphPanel.Func((int)(t.getChannelInMhz()-902.25)*20+30, (int)(t.getPhaseAngleInRadians()*100), t.getAntennaPortNumber());
 			}
 		}
 	}
